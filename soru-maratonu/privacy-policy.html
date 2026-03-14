@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gizlilik Politikası – Soru Maratonu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f14;
+      --surface: #13161e;
+      --border: #1f2433;
+      --accent: #4f8ef7;
+      --accent2: #7c5cfc;
+      --text: #e8ecf4;
+      --muted: #6b7490;
+      --success: #3ecf8e;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Sora', sans-serif;
+      font-size: 15px;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(79,142,247,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,142,247,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      margin-bottom: 56px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(79,142,247,0.1);
+      border: 1px solid rgba(79,142,247,0.25);
+      color: var(--accent);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+
+    .badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      line-height: 1.15;
+      background: linear-gradient(135deg, var(--text) 30%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+
+    .meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .meta span { display: flex; align-items: center; gap: 6px; }
+
+    .section {
+      margin-bottom: 48px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .section:hover { border-color: rgba(79,142,247,0.3); }
+
+    .section-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .section-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(79,142,247,0.1);
+      border: 1px solid rgba(79,142,247,0.2);
+      padding: 3px 10px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .section h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .section-body {
+      padding: 24px 28px;
+      color: #a8b0c8;
+    }
+
+    .section-body p { margin-bottom: 14px; }
+    .section-body p:last-child { margin-bottom: 0; }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 10px 14px;
+      background: rgba(79,142,247,0.06);
+      color: var(--accent);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(31,36,51,0.8);
+      color: #a8b0c8;
+      vertical-align: top;
+    }
+
+    .data-table tr:last-child td { border-bottom: none; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    .tag-blue { background: rgba(79,142,247,0.12); color: var(--accent); }
+    .tag-green { background: rgba(62,207,142,0.12); color: var(--success); }
+    .tag-purple { background: rgba(124,92,252,0.12); color: var(--accent2); }
+
+    .highlight {
+      background: rgba(79,142,247,0.06);
+      border-left: 3px solid var(--accent);
+      padding: 16px 20px;
+      border-radius: 0 10px 10px 0;
+      margin: 16px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .contact-card {
+      background: linear-gradient(135deg, rgba(79,142,247,0.08), rgba(124,92,252,0.08));
+      border: 1px solid rgba(79,142,247,0.2);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      margin-top: 48px;
+    }
+
+    .contact-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .contact-card p { color: var(--muted); margin-bottom: 20px; font-size: 14px; }
+
+    .contact-card a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .contact-card a:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    footer {
+      margin-top: 60px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    @media (max-width: 600px) {
+      .section-header { padding: 16px 20px; }
+      .section-body { padding: 20px; }
+      .data-table { font-size: 12px; }
+      .data-table th, .data-table td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="badge">GİZLİLİK POLİTİKASI</div>
+    <h1>Verileriniz Nasıl Korunuyor?</h1>
+    <div class="meta">
+      <span>📅 Son güncelleme: Mart 2026</span>
+      <span>📱 Soru Maratonu</span>
+      <span>🌐 Türkçe</span>
+    </div>
+  </div>
+
+  <!-- 1 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Genel Bilgilendirme</h2>
+    </div>
+    <div class="section-body">
+      <p>Bu Gizlilik Politikası, <strong style="color:var(--text);">Soru Maratonu</strong> mobil uygulamasını ("Uygulama") kullanan kişilerin kişisel verilerinin nasıl toplandığını, kullanıldığını ve korunduğunu açıklamaktadır.</p>
+      <p>Uygulama; bireysel geliştirici <strong style="color:var(--text);">Mustafa Erkaya</strong> tarafından geliştirilmektedir. Uygulamayı kullanarak bu politikada belirtilen veri işleme faaliyetlerini kabul etmiş sayılırsınız. Politikamızı kabul etmiyorsanız lütfen uygulamayı kullanmayınız.</p>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Toplanan Veriler</h2>
+    </div>
+    <div class="section-body">
+      <p>Uygulamayı kullanırken aşağıdaki veriler toplanmaktadır:</p>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Veri Türü</th>
+            <th>Kaynak</th>
+            <th>Amaç</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ad, soyad</td>
+            <td>Google Hesabı</td>
+            <td>Profil görüntüleme, sıralama listesi</td>
+          </tr>
+          <tr>
+            <td>E-posta adresi</td>
+            <td>Google Hesabı</td>
+            <td>Kimlik doğrulama</td>
+          </tr>
+          <tr>
+            <td>Profil fotoğrafı</td>
+            <td>Google Hesabı</td>
+            <td>Profil avatarı</td>
+          </tr>
+          <tr>
+            <td>Oyun skorları ve istatistikler</td>
+            <td>Uygulama içi</td>
+            <td>Haftalık sıralama, kişisel istatistikler</td>
+          </tr>
+          <tr>
+            <td>Günlük hak kullanımı</td>
+            <td>Uygulama içi</td>
+            <td>Günlük oyun hakkı yönetimi</td>
+          </tr>
+          <tr>
+            <td>Reklam etkileşim verisi</td>
+            <td>Google AdMob</td>
+            <td>Reklam gösterimi (ilerleyen sürümlerde aktif edilecek)</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="highlight">
+        Uygulamayı kullanmak için yalnızca Google hesabınızla giriş yapmanız yeterlidir. Ek form veya kayıt bilgisi talep edilmez.
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Verilerin Kullanım Amacı</h2>
+    </div>
+    <div class="section-body">
+      <p>Toplanan veriler yalnızca aşağıdaki amaçlarla kullanılmaktadır:</p>
+      <p>
+        <span class="tag tag-blue">Kimlik Doğrulama</span> Google Sign-In ile güvenli giriş sağlamak<br/><br/>
+        <span class="tag tag-green">Oyun Deneyimi</span> Skor takibi, haftalık sıralama listesi ve günlük hak yönetimi<br/><br/>
+        <span class="tag tag-purple">Reklam</span> Google AdMob üzerinden ekstra hak kazanmaya yönelik reklam gösterimi (ilerleyen sürümlerde, tamamen gönüllü)
+      </p>
+      <p style="margin-top:16px;">Verileriniz üçüncü taraflarla pazarlama veya ticari amaçlarla paylaşılmamaktadır.</p>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Firebase & Google Hizmetleri</h2>
+    </div>
+    <div class="section-body">
+      <p>Uygulama, Google LLC tarafından sağlanan <strong style="color:var(--text);">Firebase</strong> altyapısını kullanmaktadır. Firebase; kimlik doğrulama (Authentication), veritabanı (Firestore) ve sunucu fonksiyonları (Cloud Functions) hizmetleri sunar.</p>
+      <p>Verileriniz Firebase sunucularında Google'ın güvenlik standartları çerçevesinde saklanmaktadır. Uygulamamızın sunucu bölgesi <strong style="color:var(--text);">Avrupa Batı (europe-west1)</strong>'dir.</p>
+      <p>Google'ın gizlilik politikasına ulaşmak için: <a href="https://policies.google.com/privacy" style="color:var(--accent);text-decoration:none;">policies.google.com/privacy</a></p>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Veri Saklama & Silme</h2>
+    </div>
+    <div class="section-body">
+      <p>Verileriniz, hesabınız aktif olduğu sürece sistemimizde saklanır. Hesabınızı ve verilerinizi silmek istediğinizde aşağıdaki yolla talepte bulunabilirsiniz:</p>
+      <div class="highlight">
+        Veri silme talebinizi <a href="mailto:erkaya.mustafa1@gmail.com" style="color:var(--accent);text-decoration:none;">erkaya.mustafa1@gmail.com</a> adresine iletebilirsiniz. Talebiniz en geç <strong>30 gün</strong> içinde işleme alınır.
+      </div>
+      <p>Silme işlemi sonrasında; profil bilgileri, skor geçmişi ve tüm oyun verileri kalıcı olarak silinir.</p>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Reklam & AdMob</h2>
+    </div>
+    <div class="section-body">
+      <p>Uygulama, Google AdMob reklam altyapısını barındırmaktadır. Mevcut sürümde reklamlar aktif değildir; ilerleyen sürümlerde ekstra oyun hakkı kazanmak için gönüllü reklam izleme özelliği eklenecektir.</p>
+      <p>AdMob aktif olduğunda; reklam kişiselleştirmek amacıyla cihazınızın reklam kimliğini (Advertising ID) kullanabilir. Bu özelliği cihazınızın gizlilik ayarlarından yönetebilirsiniz.</p>
+      <p>Kişiselleştirilmiş reklam tercihlerinizi yönetmek için: <a href="https://adssettings.google.com" style="color:var(--accent);text-decoration:none;">adssettings.google.com</a></p>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2>Çocukların Gizliliği</h2>
+    </div>
+    <div class="section-body">
+      <p>Uygulamamız 13 yaşın altındaki çocuklara yönelik değildir ve bu yaş grubundan bilerek kişisel veri toplamayız. 13 yaşın altındaki bir kullanıcının veri bıraktığını fark edersek ilgili verileri derhal sileriz.</p>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2>Politika Güncellemeleri</h2>
+    </div>
+    <div class="section-body">
+      <p>Bu politika zaman zaman güncellenebilir. Önemli değişiklikler uygulama içi bildirim veya e-posta ile duyurulur. Güncel politikaya her zaman bu sayfa üzerinden ulaşabilirsiniz.</p>
+    </div>
+  </div>
+
+  <div class="contact-card">
+    <h3>Sorularınız mı var?</h3>
+    <p>Gizlilik politikamız veya verilerinizle ilgili her türlü sorunuz için bizimle iletişime geçebilirsiniz.</p>
+    <a href="mailto:erkaya.mustafa1@gmail.com">✉️ erkaya.mustafa1@gmail.com</a>
+  </div>
+
+  <footer>
+    <p>© 2026 Mustafa Erkaya · Soru Maratonu · Tüm hakları saklıdır</p>
+    <p style="margin-top:8px;"><a href="terms-of-service.html" style="color:var(--accent);text-decoration:none;">Kullanım Koşulları →</a></p>
+  </footer>
+
+</div>
+</body>
+</html>
